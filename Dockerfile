@@ -95,6 +95,7 @@ RUN julia --project=/home/okatsn -e 'using Pkg; Pkg.update()' \
     '
 # build IJulia is required to make any jupyter related functions such as quarto
 # Add other default packages using an Project.toml
+# CHECKPOINT: Noted that Pkg.build("IJulia") might be effortless if built here.
 
 # For OhMyREPL
 RUN mkdir -p /home/okatsn/.julia/config
