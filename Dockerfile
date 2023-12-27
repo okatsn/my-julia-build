@@ -22,10 +22,14 @@
 # FROM okatsn/my-julia-build as build-julia
 # COPY --from=build-julia /home/okatsn/.julia /home/$NB_USER/.julia
 # COPY --from=build-julia /opt/julia-okatsn /opt/julia-okatsn
-# COPY --from=build-julia /home/okatsn/Project.toml /home/$NB_USER/$WORKSPACE_DIR
+# # (Optional) COPY --from=build-julia /home/okatsn/Project.toml $WORKSPACE_DIR/Project.toml
 # # Create link in the new machine (based on that /usr/local/bin/ is already in PATH)
 # RUN sudo ln -fs /opt/julia-okatsn/bin/julia /usr/local/bin/julia
-# 
+# RUN julia --project=@okatsn -e 'using Pkg; Pkg.update()' \
+#     && julia -e '
+#     Pkg.instantiate(); \
+#     Pkg.build("IJulia"); \
+#     '
 # Stage 1: Build Julia and related configurations
 FROM ubuntu:focal-20200703 AS build-julia
 # CHECKPOINT: this version of ubuntu is sticked to https://hub.docker.com/r/jupyter/base-notebook/dockerfile that https://hub.docker.com/r/jupyter/minimal-notebook/dockerfile uses.
@@ -77,30 +81,25 @@ WORKDIR /home/okatsn
 
 # Install Julia packages and set up configuration
 
-RUN julia --project=/home/okatsn -e 'using Pkg; Pkg.update()' \
+ENV JULIA_PROJECT=@.
+# The Project.toml should be created at /home/okatsn/.julia/environments/v1.9/Project.toml 
+
+RUN julia -e 'using Pkg; Pkg.update()' \
     && julia -e '\
     using Pkg; \
-    Pkg.Registry.add(RegistrySpec(url = "https://github.com/okatsn/OkRegistry.git"))' \
-    && julia -e ' \
-    using Pkg; \
-    Pkg.add(name="IJulia"); \
-    Pkg.add(name="OkStartUp"); \
-    Pkg.add(name="OhMyREPL"); \
-    Pkg.add(name="Revise"); \
-    Pkg.add(name="TerminalPager"); \
-    Pkg.add(name="Test"); \
-    Pkg.add(name="BenchmarkTools"); \
-    Pkg.instantiate(); \
-    Pkg.build("IJulia"); \
-    '
-# build IJulia is required to make any jupyter related functions such as quarto
-# Add other default packages using an Project.toml
-# CHECKPOINT: Noted that Pkg.build("IJulia") might be effortless if built here.
+    Pkg.Registry.add(RegistrySpec(url = "https://github.com/okatsn/OkRegistry.git"))'
+
+# KEYNOTE: Don't build IJulia or add packages before the final stage
+# - The build step of IJulia is required to make any jupyter related functions such as quarto; it involves linking Julia with the Jupyter notebook infrastructure, and IJulia relies on the Conda.jl package to manage the Jupyter installation.
+# - Thus, it is prone to error or effortless if the layer of building IJulia is in the stage other than the final stage when trying to build a multi-stage Docker image, because each stage is a different machine/system.
+# - Copy only the Project.toml instead of add packages and move them to a new machine.
 
 # For OhMyREPL
-RUN mkdir -p /home/okatsn/.julia/config
-COPY startup.jl /home/okatsn/.julia/config/startup.jl
+RUN mkdir -p /home/okatsn/.julia/config && \
+    mkdir -p /home/okatsn/.julia/environments/okatsn
 
+COPY startup.jl /home/okatsn/.julia/config/startup.jl
+COPY Project.toml /home/okatsn/.julia/environments/okatsn/Project.toml
 # # KEYNOTE: For OhMyREPL etc.
 # - RUN mkdir -p /home/$NB_USER/.julia/config && cp .devcontainer/startup.jl "$_" # This mkdir all necessary paths and copy files to there in one line. It worked in bash but failed in Dockerfile.
 # - Use $HOME instead of /home/$NB_USER will fail! Since $HOME is not recognized as absolute directory!
