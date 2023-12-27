@@ -1,12 +1,14 @@
 # KEYNOTE: How to build the image solely from this Dockerfile:
 # (In MyJuliaSpace/; change "latest" to any other tag names)
-# $ docker build -t myjspace -f .devcontainer/Dockerfile .
-# $ docker tag myjspace okatsn/my-julia-space:latest
-# $ docker push okatsn/my-julia-space:latest
+# $ docker build -t jbuild -f Dockerfile .
+# $ docker tag jbuild okatsn/my-julia-build:latest
+# $ docker push okatsn/my-julia-build:latest
 #
+# Explain:
+# - bulid docker image of tag (-t) "jbuild" using file ("-f") "Dockerfile" in the context of current directory (`.` in the end)
 # Why not use devcontainer.json to build?
 # - Building image from devcontainer.json creates some additional files, such as those in /home/okatsn/.vscode-server and /home/okatsn/.vscode-server-insiders
-# - If there are other container (saying the-target) built upon this image, and it also has /home/okatsn/.vscode-server but should with different content, the files in source (my-julia-space) is kept, and those in the target are discarded. This is not what we want.
+# - If there are other container (saying the-target) that was directly built upon this image, and it also has /home/okatsn/.vscode-server but should with different content, the files in source (my-julia-build) is kept, and those in the target are discarded. This is not what we want.
 #
 # References:
 # https://github.com/andferrari/julia_notebook/blob/master/Dockerfile
