@@ -62,6 +62,8 @@ RUN mkdir $JULIA_PATH \
 # # the following command set `/usr/local/bin/julia` as a link to /opt/julia-${VARIANT}/bin/julia, that
 # # in bash type `julia` starts the julia REPL.
 # RUN ln -fs /opt/julia-${VARIANT}/bin/julia /usr/local/bin/julia
+#
+# You can also refer this: https://github.com/docker-library/julia/blob/154363df0b038fb8a5e74bb97bbed3fb8faea7ca/1.9/bullseye/Dockerfile
 
 # Create and Switch to non-root user, and grant necessary permissions
 RUN useradd -m -s /bin/bash okatsn && \
