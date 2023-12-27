@@ -22,7 +22,9 @@
 # FROM okatsn/my-julia-build as build-julia
 # COPY --from=build-julia /home/okatsn/.julia /home/$NB_USER/.julia
 # COPY --from=build-julia /opt/julia-okatsn /opt/julia-okatsn
-# # (Optional) COPY --from=build-julia /home/okatsn/Project.toml $WORKSPACE_DIR/Project.toml
+# # (Optional) 
+# # COPY --from=build-julia /home/okatsn/.julia/environments/v1.10-okatsn/Project.toml /home/$NB_USER/.julia/environments/v1.10-okatsn/Project.toml
+# # ENV JULIA_PROJECT=@v1.10-okatsn
 # # Create link in the new machine (based on that /usr/local/bin/ is already in PATH)
 # RUN sudo ln -fs /opt/julia-okatsn/bin/julia /usr/local/bin/julia
 # RUN julia --project=@okatsn -e 'using Pkg; Pkg.update()' \
@@ -45,7 +47,8 @@ RUN apt-get update && apt-get -y install \
     git
 
 # Install Julia # SETME: Set the julia version here.
-ARG VARIANT="1.9.4" 
+ARG VARIANT="1.10.0" 
+ENV JULIA_PROJECT=@v1.10-okatsn
 # ENV JULIA_PATH /opt/julia-${VARIANT}
 
 ENV JULIA_PATH /opt/julia-okatsn
@@ -81,7 +84,6 @@ WORKDIR /home/okatsn
 
 # Install Julia packages and set up configuration
 
-ENV JULIA_PROJECT=@.
 # The Project.toml should be created at /home/okatsn/.julia/environments/v1.9/Project.toml 
 
 RUN julia -e 'using Pkg; Pkg.update()' \
