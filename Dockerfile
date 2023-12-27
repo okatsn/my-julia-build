@@ -22,7 +22,6 @@
 # FROM okatsn/my-julia-build as build-julia
 # COPY --from=build-julia /home/okatsn/.julia /home/$NB_USER/.julia
 # COPY --from=build-julia /opt/julia-okatsn /opt/julia-okatsn
-# COPY --from=build-julia /home/okatsn/Project.toml /home/$NB_USER/$WORKSPACE_DIR
 # # Create link in the new machine (based on that /usr/local/bin/ is already in PATH)
 # RUN sudo ln -fs /opt/julia-okatsn/bin/julia /usr/local/bin/julia
 # 
@@ -77,7 +76,7 @@ WORKDIR /home/okatsn
 
 # Install Julia packages and set up configuration
 
-RUN julia --project=/home/okatsn -e 'using Pkg; Pkg.update()' \
+RUN julia -e 'using Pkg; Pkg.update()' \
     && julia -e '\
     using Pkg; \
     Pkg.Registry.add(RegistrySpec(url = "https://github.com/okatsn/OkRegistry.git"))' \
