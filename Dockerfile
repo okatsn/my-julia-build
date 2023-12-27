@@ -48,7 +48,8 @@ RUN apt-get update && apt-get -y install \
 
 # Install Julia # SETME: Set the julia version here.
 ARG VARIANT="1.10.0" 
-ENV JULIA_PROJECT=@v1.10-okatsn
+ARG JULIA_PROJECT=@v1.10-okatsn
+ENV JULIA_PROJECT=${JULIA_PROJECT}
 # ENV JULIA_PATH /opt/julia-${VARIANT}
 
 ENV JULIA_PATH /opt/julia-okatsn
@@ -98,10 +99,10 @@ RUN julia -e 'using Pkg; Pkg.update()' \
 
 # For OhMyREPL
 RUN mkdir -p /home/okatsn/.julia/config && \
-    mkdir -p /home/okatsn/.julia/environments/okatsn
+    mkdir -p /home/okatsn/.julia/environments/${JULIA_PROJECT}
 
 COPY startup.jl /home/okatsn/.julia/config/startup.jl
-COPY Project.toml /home/okatsn/.julia/environments/okatsn/Project.toml
+COPY Project.toml /home/okatsn/.julia/environments/${JULIA_PROJECT}/Project.toml
 # # KEYNOTE: For OhMyREPL etc.
 # - RUN mkdir -p /home/$NB_USER/.julia/config && cp .devcontainer/startup.jl "$_" # This mkdir all necessary paths and copy files to there in one line. It worked in bash but failed in Dockerfile.
 # - Use $HOME instead of /home/$NB_USER will fail! Since $HOME is not recognized as absolute directory!
