@@ -1,6 +1,6 @@
 # KEYNOTE: How to build the image solely from this Dockerfile:
 # (These commands should be executed in WSL at the repository directory my-julia-build)
-# $ docker build -t jbuild -f Dockerfile .
+# $ docker-compose build
 # $ docker tag jbuild okatsn/my-julia-build:latest
 # $ docker push okatsn/my-julia-build:latest
 #
@@ -86,9 +86,11 @@ RUN mkdir $JULIA_PATH \
 # You can also refer this: https://github.com/docker-library/julia/blob/154363df0b038fb8a5e74bb97bbed3fb8faea7ca/1.9/bullseye/Dockerfile
 
 # Create and Switch to non-root user, and grant necessary permissions
-RUN useradd -m -s /bin/bash okatsn && \
+ARG NB_GID="to be replaced by that in docker-compose.yml"
+ARG NB_UID="to be replaced by that in docker-compose.yml"
+RUN useradd -m -u $NB_UID -g $NB_GID -s /bin/bash okatsn && \
     mkdir /home/okatsn/.julia && \
-    chown -R okatsn:okatsn /home/okatsn
+    chown -R $NB_UID:$NB_GID /home/okatsn
 # CHECKPOINT: It does not properly set the permission.
 
 USER okatsn

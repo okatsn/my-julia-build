@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  myservice:
+    image: jbuild
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - NB_UID=${NB_UID}
+        - NB_GID=${NB_GID}
