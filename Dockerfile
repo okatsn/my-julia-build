@@ -19,14 +19,13 @@
 #
 #
 # KEYNOTE: How to use (please replace $NB_USER, $WORKSPACE_DIR and $VARIANT yourself). $JULIA_PROJECT is something like "v1.10".
-# FROM okatsn/my-julia-build as build-julia
+# FROM okatsn/my-julia-build:latest as build-julia
 # COPY --from=build-julia /home/okatsn/.julia /home/$NB_USER/.julia
 # COPY --from=build-julia /opt/julia-okatsn /opt/julia-okatsn
-# COPY --from=build-julia /home/okatsn/.julia/environments/$JULIA_PROJECT/Project.toml /home/$NB_USER/.julia/environments/$JULIA_PROJECT/Project.toml
 # # Create link in the new machine (based on that /usr/local/bin/ is already in PATH)
 # RUN sudo ln -fs /opt/julia-okatsn/bin/julia /usr/local/bin/julia
-# RUN julia --project=@okatsn -e 'using Pkg; Pkg.update()' \
-#     && julia -e '
+# RUN julia -e 'using Pkg; Pkg.update()' \
+#     && julia -e ' \
 #     Pkg.instantiate(); \
 #     Pkg.build("IJulia"); \
 #     '
@@ -67,6 +66,7 @@ ARG OKATSN_JULIA_ENVS=/home/okatsn/.julia/environments
 
 # ENV JULIA_PATH /opt/julia-${VARIANT}
 ENV JULIA_PATH /opt/julia-okatsn
+# !!! note Also replace "julia-okatsn" since there are probably hard codes elsewhere.
 # ENV PATH $JULIA_PATH/bin:$PATH
 # - Install in JULIA_PATH 
 # - the executable is $JULIA_PATH/bin/julia
@@ -81,9 +81,7 @@ RUN mkdir $JULIA_PATH \
     && ln -fs $JULIA_PATH/bin/julia /usr/local/bin/julia
 
 # # For Julia installed under /opt/julia-${VARIANT}/bin/julia, 
-# # the following command set `/usr/local/bin/julia` as a link to /opt/julia-${VARIANT}/bin/julia, that
-# # in bash type `julia` starts the julia REPL.
-# RUN ln -fs /opt/julia-${VARIANT}/bin/julia /usr/local/bin/julia
+# # the following command set `/usr/local/bin/julia` as a link to /opt/julia-${VARIANT}/bin/julia, that in bash type `julia` starts the julia REPL.
 #
 # You can also refer this: https://github.com/docker-library/julia/blob/154363df0b038fb8a5e74bb97bbed3fb8faea7ca/1.9/bullseye/Dockerfile
 
@@ -91,6 +89,7 @@ RUN mkdir $JULIA_PATH \
 RUN useradd -m -s /bin/bash okatsn && \
     mkdir /home/okatsn/.julia && \
     chown -R okatsn:okatsn /home/okatsn
+# CHECKPOINT: It does not properly set the permission.
 
 USER okatsn
 
