@@ -48,7 +48,8 @@ RUN apt-get update && apt-get -y install \
 
 # Install Julia # SETME: Set the julia version here.
 ARG VARIANT="1.10.0" 
-ARG JULIA_PROJECT=@v1.10-okatsn
+ARG JULIA_PROJECT=v1.10-okatsn
+# Don't add `@`, @v1.10-okatsn will create a folder "@v1.10-okatsn".
 ENV JULIA_PROJECT=${JULIA_PROJECT}
 # ENV JULIA_PATH /opt/julia-${VARIANT}
 
