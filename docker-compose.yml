@@ -9,3 +9,4 @@ services:
       args:
         - NB_UID=${NB_UID}
         - NB_GID=${NB_GID}
+    entrypoint: sh -c "sleep infinity"
