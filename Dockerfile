@@ -96,9 +96,10 @@ RUN chmod +x /tmp/docker-config.sh && . /tmp/docker-config.sh && \
     useradd -m -u "$NB_UID" -g "$NB_GID" -s /bin/bash okatsn && \
     mkdir /home/okatsn/.julia && \
     chown -R "$NB_UID:$NB_GID" /home/okatsn
-# CHECKPOINT: Case Closed
+# CHECKPOINT: The use of docker-config is limited. Case Closed.
 # - When using `/bin/bash -c /tmp/docker-config.sh`, the exported variable does not persist, since it is executed in a sub-shell. Instead, in the cases of `. /tmp/docker-config.sh` or `source /tmp/docker-config.sh`, exported variable persist. However, 
 # - Use with or without quote ("$NB_UID:NB_GID" or $NB_UID:NB_GID) makes no difference; however, the error message will be easier to understand if NB_UID is empty.
+# - However, exported variables (i.e., NB_UID) cannot persist after this layer due to Docker's nature, and the use of this approach is very limited (you have to execute "docker-config.sh" for every `RUN`, and there is no way to use `USER $NB_UID`!)
 
 USER okatsn
 
