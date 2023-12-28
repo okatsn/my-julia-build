@@ -94,7 +94,7 @@ ARG NB_GID
 COPY docker-config.sh /tmp/docker-config.sh
 RUN chmod +x /tmp/docker-config.sh && /bin/bash -c "/tmp/docker-config.sh"
 
-RUN RUN useradd -m -u $NB_UID -g $NB_GID -s /bin/bash okatsn && \
+RUN useradd -m -u $NB_UID -g $NB_GID -s /bin/bash okatsn && \
     mkdir /home/okatsn/.julia && \
     chown -R $NB_UID:NB_GID /home/okatsn
 
