@@ -1,5 +1,5 @@
 export NB_UID=1000
-export NB_GID=1000
+export NB_GID=100
 
 # =========== How to use it locally ===========
 # # # In Dockerfile
@@ -12,10 +12,6 @@ export NB_GID=1000
 # COPY docker-config.sh /tmp/docker-config.sh
 # RUN chmod +x /tmp/docker-config.sh && /bin/bash -c "/tmp/docker-config.sh"
 # 
-# # Use the variables
-# RUN useradd -m -u $NB_UID -g $NB_GID -s /bin/bash $NB_USER
-# 
-# # Continue with other instructions
 
 # KEYNOTE: 
 # - `-m`: ensures that a home directory is created for the new user
@@ -33,8 +29,15 @@ export NB_GID=1000
 # 
 # # Make it executable and execute
 # RUN chmod +x /tmp/docker-config.sh && /bin/bash -c "/tmp/docker-config.sh"
-# 
+ 
+
+
+# ...
+# ...
+# ...
+#
+# # Continue with other instructions
+#
 # # Use the variables
 # RUN useradd -m -u $NB_UID -g $NB_GID -s /bin/bash $NB_USER
 # 
-# # Continue with other instructions

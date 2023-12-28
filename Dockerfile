@@ -92,11 +92,13 @@ ARG NB_UID
 ARG NB_GID
 
 COPY docker-config.sh /tmp/docker-config.sh
-RUN chmod +x /tmp/docker-config.sh && /bin/bash -c "/tmp/docker-config.sh"
-
-RUN useradd -m -u $NB_UID -g $NB_GID -s /bin/bash okatsn && \
+RUN chmod +x /tmp/docker-config.sh && . /tmp/docker-config.sh && \
+    useradd -m -u "$NB_UID" -g "$NB_GID" -s /bin/bash okatsn && \
     mkdir /home/okatsn/.julia && \
-    chown -R $NB_UID:NB_GID /home/okatsn
+    chown -R "$NB_UID:$NB_GID" /home/okatsn
+# CHECKPOINT: Case Closed
+# - When using `/bin/bash -c /tmp/docker-config.sh`, the exported variable does not persist, since it is executed in a sub-shell. Instead, in the cases of `. /tmp/docker-config.sh` or `source /tmp/docker-config.sh`, exported variable persist. However, 
+# - Use with or without quote ("$NB_UID:NB_GID" or $NB_UID:NB_GID) makes no difference; however, the error message will be easier to understand if NB_UID is empty.
 
 USER okatsn
 
