@@ -23,4 +23,5 @@ services:
 
     # Overrides default command so things don't shut down after the process ends.
     # command: /bin/sh -c "while sleep 1000; do :; done"
+    # # This command is suggested by VSCODE. Although it prevent container to close right after it starts, it also prevent user's access to terminal.
  
