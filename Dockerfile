@@ -20,12 +20,16 @@
 #
 # KEYNOTE: How to use (please replace $NB_USER, $WORKSPACE_DIR and $VARIANT yourself). $JULIA_PROJECT is something like "v1.10".
 # FROM okatsn/my-julia-build:latest as build-julia
-# COPY --from=build-julia /home/okatsn/.julia /home/$NB_USER/.julia
-# COPY --from=build-julia /opt/julia-okatsn /opt/julia-okatsn
+# # (at USER root). Refer .env file of the last stage (i.e., my-tex-life) for NB_UID and NB_GID; or define your NB_UID and NB_GID for this build in .env, and include it in docker-compose.yml as args.
+# COPY --from=build-julia --chown=$NB_UID:$NB_GID /home/okatsn/.julia /home/$NB_USER/.julia
+# COPY --from=build-julia --chown=$NB_UID:$NB_GID /opt/julia-okatsn /opt/julia-okatsn
 # # Create link in the new machine (based on that /usr/local/bin/ is already in PATH)
-# RUN sudo ln -fs /opt/julia-okatsn/bin/julia /usr/local/bin/julia
+# RUN ln -fs /opt/julia-okatsn/bin/julia /usr/local/bin/julia
 # # Build IJulia
 # RUN julia -e 'using Pkg; Pkg.update(); Pkg.instantiate(); Pkg.build("IJulia");' 
+
+
+
 # Stage 1: Build Julia and related configurations
 # SETME: Ubuntu version of build-julia
 FROM ubuntu:focal-20200703 AS build-julia
