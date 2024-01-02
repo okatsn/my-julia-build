@@ -1,0 +1,8 @@
+[deps]
+BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
+IJulia = "7073ff75-c697-5162-941a-fcdaad2a7d2a"
+OhMyREPL = "5fb14364-9ced-5910-84b2-373655c76a03"
+OkStartUp = "305ee1c2-282c-4917-94ba-32dcc37024a6"
+Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
+TerminalPager = "0c614874-6106-40ed-a7c2-2f1cd0bff883"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
