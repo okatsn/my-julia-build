@@ -24,11 +24,8 @@
 # COPY --from=build-julia /opt/julia-okatsn /opt/julia-okatsn
 # # Create link in the new machine (based on that /usr/local/bin/ is already in PATH)
 # RUN sudo ln -fs /opt/julia-okatsn/bin/julia /usr/local/bin/julia
-# RUN julia -e 'using Pkg; Pkg.update()' \
-#     && julia -e ' \
-#     Pkg.instantiate(); \
-#     Pkg.build("IJulia"); \
-#     '
+# # Build IJulia
+# RUN julia -e 'using Pkg; Pkg.update(); Pkg.instantiate(); Pkg.build("IJulia");' 
 # Stage 1: Build Julia and related configurations
 # SETME: Ubuntu version of build-julia
 FROM ubuntu:focal-20200703 AS build-julia
