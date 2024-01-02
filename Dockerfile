@@ -27,7 +27,8 @@
 # RUN ln -fs /opt/julia-okatsn/bin/julia /usr/local/bin/julia
 # # Build IJulia
 # RUN julia -e 'using Pkg; Pkg.update(); Pkg.instantiate(); Pkg.build("IJulia");' 
-
+#
+# # VSCODE environment: Add Named volume in your docker-compose.yml; please refer MyTeXLifeWithJulia as an example.
 
 
 # Stage 1: Build Julia and related configurations
