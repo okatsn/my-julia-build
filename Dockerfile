@@ -25,6 +25,7 @@
 # COPY --from=build-julia --chown=$NB_UID:$NB_GID /opt/julia-okatsn /opt/julia-okatsn
 # # Create link in the new machine (based on that /usr/local/bin/ is already in PATH)
 # RUN ln -fs /opt/julia-okatsn/bin/julia /usr/local/bin/julia
+# # (Switch to $NB_USER)
 # # Build IJulia
 # RUN julia -e 'using Pkg; Pkg.update(); Pkg.instantiate(); Pkg.build("IJulia");' 
 #
